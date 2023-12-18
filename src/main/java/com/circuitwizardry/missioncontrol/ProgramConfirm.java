@@ -38,6 +38,8 @@ public class ProgramConfirm extends javax.swing.JFrame {
         codeFrame = new javax.swing.JTextArea();
         writeButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        launchMode = new javax.swing.JCheckBox();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,6 +57,21 @@ public class ProgramConfirm extends javax.swing.JFrame {
 
         jLabel1.setText("Preview code before writing to board");
 
+        launchMode.setText("Set to launch mode");
+        launchMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                launchModeActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel2.setText("What is this?");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,7 +82,12 @@ public class ProgramConfirm extends javax.swing.JFrame {
                     .addComponent(writeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(launchMode)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)))
                         .addGap(0, 72, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -76,7 +98,11 @@ public class ProgramConfirm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(launchMode)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(writeButton)
                 .addContainerGap())
         );
@@ -91,6 +117,22 @@ public class ProgramConfirm extends javax.swing.JFrame {
         System.out.println("sent!");
         this.dispose();
     }//GEN-LAST:event_writeButtonActionPerformed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void launchModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchModeActionPerformed
+        // TODO add your handling code here:
+        String code = codeFrame.getText();
+        int index = code.indexOf("startupMode") + 4 + 10;
+        if (launchMode.isSelected()) {
+            code = code.substring(0, index) + "1" + code.substring(index + 1);
+        } else {
+            code = code.substring(0, index) + "0" + code.substring(index + 1);
+        }
+        codeFrame.setText(code);
+    }//GEN-LAST:event_launchModeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,7 +165,9 @@ public class ProgramConfirm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea codeFrame;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox launchMode;
     private javax.swing.JButton writeButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -50,6 +50,11 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         debriefButton.setText("Debrief");
+        debriefButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                debriefButtonActionPerformed(evt);
+            }
+        });
 
         wirelessButton.setText("Wireless (WIP)");
 
@@ -71,17 +76,18 @@ public class MainScreen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(19, 19, 19)
-                            .addComponent(programButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(debriefButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(wirelessButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(docsButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(programButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(debriefButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(wirelessButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(docsButton))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(79, 79, 79)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -133,6 +139,12 @@ public class MainScreen extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_docsButtonActionPerformed
+
+    private void debriefButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debriefButtonActionPerformed
+        var debriefScreen = new Debrief();
+        debriefScreen.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_debriefButtonActionPerformed
 
     /**
      * @param args the command line arguments

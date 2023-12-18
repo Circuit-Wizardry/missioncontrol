@@ -85,7 +85,7 @@ public class ProgramScreen extends javax.swing.JFrame {
         dataPanel.setLayout(dataPanelLayout);
         dataPanelLayout.setHorizontalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 695, Short.MAX_VALUE)
+            .addGap(0, 689, Short.MAX_VALUE)
         );
         dataPanelLayout.setVerticalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +95,7 @@ public class ProgramScreen extends javax.swing.JFrame {
         connectionStatus.setText("No connection.");
 
         generateJson.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        generateJson.setText("BURN TO BOARD");
+        generateJson.setText("SAVE TO BOARD");
         generateJson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateJsonActionPerformed(evt);
@@ -107,13 +107,9 @@ public class ProgramScreen extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(dataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(6, 6, 6)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(198, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -127,6 +123,10 @@ public class ProgramScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(generateJson)
                 .addGap(34, 34, 34))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,14 +154,13 @@ public class ProgramScreen extends javax.swing.JFrame {
         // CONNECT TO BOARD & READ WHAT ITS SENDING
         if (connected) return;
         
-        connectionStatus.setText("Connecting...");
+        connectionStatus.setText("There was an error connecting to your board.");
         
         SerialPort ports[] = SerialPort.getCommPorts();
         int selectedItem = comSelector.getSelectedIndex();
         SerialPort sp = ports[selectedItem];
         sp.setBaudRate(9600);
         sp.openPort();
-        connected = true;
         port = sp;
         
         try {
@@ -187,8 +186,12 @@ public class ProgramScreen extends javax.swing.JFrame {
                     boardId = readBuffer[i+1]; // skip new line and carriage return bytes
                 }
             }
+            
+            if (boardId != 0) {
+                connected = true;
+                connectionStatus.setText("Connected to board ID " + boardId);
+            }
             System.out.println(boardId);
-            connectionStatus.setText("Connected to board ID " + boardId);
             
             // Handling code for first connect if STARLIGHT is detected
             
