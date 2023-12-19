@@ -255,6 +255,11 @@ public class Debrief extends javax.swing.JFrame {
                         System.out.println("found annotation!");
                         annotations.add(new AnnotationLine(i, true, false));
                         annotations.add(new AnnotationText("Launch", i - (data.size() / 15), maximum, false));
+                    case 2:
+                        System.out.println("found apogee!");
+                        annotations.add(new AnnotationLine(i, true, false));
+                        annotations.add(new AnnotationText("Apogee", i - (data.size() / 15), maximum, false));
+
             }
             time.add(i);
         }
