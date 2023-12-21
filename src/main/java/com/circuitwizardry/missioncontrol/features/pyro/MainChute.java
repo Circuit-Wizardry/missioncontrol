@@ -5,6 +5,7 @@
 package com.circuitwizardry.missioncontrol.features.pyro;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *

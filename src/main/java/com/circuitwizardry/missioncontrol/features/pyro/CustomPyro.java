@@ -5,6 +5,7 @@
 package com.circuitwizardry.missioncontrol.features.pyro;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -24,9 +25,21 @@ public class CustomPyro extends PyroFeature {
         super.setVisible(true);
     }
     
+    public boolean isInteger(String s) {
+    try { 
+        Integer.parseInt(s); 
+    } catch(NumberFormatException e) { 
+        return false; 
+    } catch(NullPointerException e) {
+        return false;
+    }
+    // only got here if we didn't return false
+    return true;
+    }
+    
     @Override
     public String generateJson() {
-        String output = "'trigger': " + jComboBox1.getSelectedIndex() + ", 'value': " + jTextField1.getText() + ", 'time': " + fireTime.getText() + " }";
+        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
         return output;
     }
 
@@ -45,13 +58,19 @@ public class CustomPyro extends PyroFeature {
         jLabel3 = new javax.swing.JLabel();
         fireTime = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        custom = new javax.swing.JTextField();
+        errorText = new javax.swing.JLabel();
 
         jLabel1.setText("Custom Pyro Charge");
 
-        jLabel2.setText("Pyro charge will be fired");
+        jLabel2.setText("Pyro will be fired");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "at apogee", "___ seconds after apogee", "at launch detected", "___ seconds after launch detected", "at motor burnout", "___ seconds after motor burnout", "at ___ feet traveling upwards", "at ___ feet traveling downwards", "at landing", "___ seconds after landing" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "at apogee", "at ___ feet traveling downwards", "at ___ feet traveling upwards", "(WIP) ___ seconds after apogee", "at launch detected", "(WIP) ___ seconds after launch detected", "at motor burnout", "(WIP) ___ seconds after motor burnout", "at landing", "(WIP) ___ seconds after landing" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -60,6 +79,7 @@ public class CustomPyro extends PyroFeature {
 
         jLabel3.setText("and will fire for");
 
+        fireTime.setText("0");
         fireTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fireTimeActionPerformed(evt);
@@ -68,11 +88,14 @@ public class CustomPyro extends PyroFeature {
 
         jLabel4.setText("seconds");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        custom.setText("0");
+        custom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                customActionPerformed(evt);
             }
         });
+
+        errorText.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -81,13 +104,17 @@ public class CustomPyro extends PyroFeature {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(44, 44, 44)
+                        .addComponent(errorText))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(custom, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(46, 46, 46)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -96,17 +123,19 @@ public class CustomPyro extends PyroFeature {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4))
                             .addComponent(jLabel3))))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(errorText))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(custom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,18 +155,32 @@ public class CustomPyro extends PyroFeature {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void customActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_customActionPerformed
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        if (jComboBox1.getSelectedItem().toString().contains("WIP")) {
+            errorText.setText("Feature is a WORK IN PROGRESS!");
+        } else if (!isInteger(custom.getText())) {
+            errorText.setText("Please specify an integer.");
+        } else if (!isInteger(fireTime.getText())) {
+            errorText.setText("Please specify an integer.");
+        } else {
+            errorText.setText("");
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField custom;
+    private javax.swing.JLabel errorText;
     private javax.swing.JTextField fireTime;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,12 +19,12 @@ public class AudioCues extends Feature {
      * Creates new form PyroCharge
      * @param parent
      * @param num
-     * @param identifier
      */
     public AudioCues(JPanel parent, int num) {
         this.setSize(696, 110);
         this.setLocation(0, num*100);
         initComponents();
+        
         
         parent.add(this);
         super.setVisible(true);

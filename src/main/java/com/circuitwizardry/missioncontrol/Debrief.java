@@ -259,6 +259,10 @@ public class Debrief extends javax.swing.JFrame {
                         System.out.println("found apogee!");
                         annotations.add(new AnnotationLine(i, true, false));
                         annotations.add(new AnnotationText("Apogee", i - (data.size() / 15), maximum, false));
+                    case 9:
+                        System.out.println("found event!");
+                        annotations.add(new AnnotationLine(i, true, false));
+                        annotations.add(new AnnotationText("Trigger", i - (data.size() / 15), maximum, false));
 
             }
             time.add(i);

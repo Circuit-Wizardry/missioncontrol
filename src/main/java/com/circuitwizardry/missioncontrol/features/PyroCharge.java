@@ -179,9 +179,9 @@ public class PyroCharge extends Feature {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> actionSelector;
+    public javax.swing.JComboBox<String> actionSelector;
     private javax.swing.JLabel errorLabel;
-    private javax.swing.JLabel infoLabel;
+    public javax.swing.JLabel infoLabel;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

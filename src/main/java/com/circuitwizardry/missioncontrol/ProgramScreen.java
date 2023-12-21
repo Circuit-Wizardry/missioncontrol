@@ -6,10 +6,13 @@ package com.circuitwizardry.missioncontrol;
 import com.fazecast.jSerialComm.*;
 import com.circuitwizardry.missioncontrol.features.*;
 import com.circuitwizardry.missioncontrol.features.pyro.*;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 /**
  *
  * @author marce
@@ -55,9 +58,10 @@ public class ProgramScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         comSelector = new javax.swing.JComboBox<>();
         connectButton = new javax.swing.JButton();
-        dataPanel = new javax.swing.JPanel();
         connectionStatus = new javax.swing.JLabel();
         generateJson = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dataPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,19 +83,6 @@ public class ProgramScreen extends javax.swing.JFrame {
             }
         });
 
-        dataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout dataPanelLayout = new javax.swing.GroupLayout(dataPanel);
-        dataPanel.setLayout(dataPanelLayout);
-        dataPanelLayout.setHorizontalGroup(
-            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 689, Short.MAX_VALUE)
-        );
-        dataPanelLayout.setVerticalGroup(
-            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
-        );
-
         connectionStatus.setText("No connection.");
 
         generateJson.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -102,14 +93,25 @@ public class ProgramScreen extends javax.swing.JFrame {
             }
         });
 
+        dataPanel.setPreferredSize(new java.awt.Dimension(850, 250));
+
+        javax.swing.GroupLayout dataPanelLayout = new javax.swing.GroupLayout(dataPanel);
+        dataPanel.setLayout(dataPanelLayout);
+        dataPanelLayout.setHorizontalGroup(
+            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 890, Short.MAX_VALUE)
+        );
+        dataPanelLayout.setVerticalGroup(
+            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 286, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(dataPanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(198, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -124,9 +126,14 @@ public class ProgramScreen extends javax.swing.JFrame {
                 .addComponent(generateJson)
                 .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(6, 6, 6)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(399, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,9 +149,12 @@ public class ProgramScreen extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(connectionStatus))
                     .addComponent(generateJson, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(305, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(94, 94, 94)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         pack();
@@ -202,15 +212,33 @@ public class ProgramScreen extends javax.swing.JFrame {
                 generateJson.setVisible(true);
                 dataPanel.setVisible(true);
                 connectionStatus.setText("Connected to STARLIGHT board.");
+                dataPanel.add(new JLabel("text"));
+
                 // Add two JPanels for EJECTION and IGNITER charges
                 
                 PyroCharge ejection = new PyroCharge(dataPanel, 0, "EJECTION");
                 PyroCharge igniter = new PyroCharge(dataPanel, 1, "IGNITER");
-                ThrustVectoring tvc = new ThrustVectoring(dataPanel, 2);
+                GPIO gp0 = new GPIO(dataPanel, 2, "GP0");
+                GPIO gp1 = new GPIO(dataPanel, 3, "GP1");
+                GPIO gp16 = new GPIO(dataPanel, 4, "GP16");
+                GPIO gp17 = new GPIO(dataPanel, 5, "GP17");
+                GPIO gp18 = new GPIO(dataPanel, 6, "GP18");
+                GPIO gp19 = new GPIO(dataPanel, 7, "GP19");
+                ThrustVectoring tvc = new ThrustVectoring(dataPanel, 8);
                 
                 features.add(ejection);
                 features.add(igniter);
+                features.add(gp0);
+                features.add(gp1);
+                features.add(gp16);
+                features.add(gp17);
+                features.add(gp18);
+                features.add(gp19);
                 features.add(tvc);
+                
+                dataPanel.setPreferredSize(new Dimension(850, features.size() * 100));
+                dataPanel.revalidate();
+//                features.add(tvc);
             }
         }
     }//GEN-LAST:event_connectButtonActionPerformed
@@ -270,5 +298,6 @@ public class ProgramScreen extends javax.swing.JFrame {
     private javax.swing.JPanel dataPanel;
     private javax.swing.JButton generateJson;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
