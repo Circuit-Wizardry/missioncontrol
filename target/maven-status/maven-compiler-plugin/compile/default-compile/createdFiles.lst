@@ -33,6 +33,7 @@ com\circuitwizardry\missioncontrol\features\pyro\MainChute$2.class
 com\circuitwizardry\missioncontrol\ProgramScreen$3.class
 com\circuitwizardry\missioncontrol\features\ThrustVectoring$1.class
 com\circuitwizardry\missioncontrol\features\pyro\PyroFeature.class
+com\circuitwizardry\missioncontrol\ProgramConfirm$4.class
 com\circuitwizardry\missioncontrol\features\pyro\CustomPyro$1.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$4.class
 com\circuitwizardry\missioncontrol\features\gpio\Output.class

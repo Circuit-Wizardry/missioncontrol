@@ -6,6 +6,7 @@ package com.circuitwizardry.missioncontrol.features.pyro;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -16,18 +17,22 @@ public class DrogueChute extends PyroFeature {
     /**
      * Creates new form MainChute
      * @param parent
+     * @param prev_data
      */
-    public DrogueChute(JPanel parent) {
+    public DrogueChute(JPanel parent, JSONObject data, boolean isLoading) {
         this.setSize(400, 90);
         this.setLocation(250, 5);
         initComponents();
         parent.add(this);
         super.setVisible(true);
+        
+        // data initialize: we don't even need to!
     }
     
     @Override
-    public String generateJson() {
-        String output = "'trigger': " + jComboBox1.getSelectedIndex() + ", 'value': " + 0 + " }";
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("action", "drogue");
         return output;
     }
 

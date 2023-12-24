@@ -7,6 +7,7 @@ package com.circuitwizardry.missioncontrol.features.gpio;
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -39,8 +40,13 @@ public class EmulatePyro extends GPIOFeature {
     }
     
     @Override
-    public String generateJson() {
-        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("action", "other");
+        output.put("trigger", jComboBox1.getSelectedIndex()+1);
+        output.put("value", custom.getText());
+        output.put("time", fireTime.getText());
+//        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
         return output;
     }
 

@@ -6,6 +6,7 @@ package com.circuitwizardry.missioncontrol.features.pyro;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -16,15 +17,23 @@ public class CustomPyro extends PyroFeature {
     /**
      * Creates new form CustomPyro
      * @param parent
+     * @param prev_data
      */
-    public CustomPyro(JPanel parent) {
+    public CustomPyro(JPanel parent, JSONObject data, boolean isLoading) {
         this.setSize(400, 90);
         this.setLocation(250, 5);
         initComponents();
         parent.add(this);
         super.setVisible(true);
+        
+        // data initialize
+        if (!isLoading) return;
+        jComboBox1.setSelectedIndex(data.getInt("trigger")-1);
+        custom.setText(Integer.toString(data.getInt("value")));
+        fireTime.setText(Integer.toString(data.getInt("time")));
     }
     
+    // dumbest function ive ever written
     public boolean isInteger(String s) {
     try { 
         Integer.parseInt(s); 
@@ -38,8 +47,15 @@ public class CustomPyro extends PyroFeature {
     }
     
     @Override
-    public String generateJson() {
-        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("action", "custom");
+        output.put("trigger", jComboBox1.getSelectedIndex()+1);
+        output.put("value", Integer.parseInt(custom.getText()));
+        output.put("time", Integer.parseInt(fireTime.getText()));
+        
+        
+//        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
         return output;
     }
 

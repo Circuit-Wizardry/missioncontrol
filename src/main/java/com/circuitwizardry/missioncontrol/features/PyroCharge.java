@@ -6,6 +6,8 @@ package com.circuitwizardry.missioncontrol.features;
 
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import javax.swing.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -14,15 +16,18 @@ import javax.swing.*;
 public class PyroCharge extends Feature {
 
     PyroFeature selectedOption;
+    JSONObject data = new JSONObject();
     int id;
+    boolean isLoading = true;
     
     /**
      * Creates new form PyroCharge
      * @param parent
      * @param num
      * @param identifier
+     * @param prev_data
      */
-    public PyroCharge(JPanel parent, int num, String identifier) {
+    public PyroCharge(JPanel parent, int num, String identifier, String prev_data) {
         this.setSize(696, 100);
         this.setLocation(0, num*100);
         initComponents();
@@ -31,25 +36,68 @@ public class PyroCharge extends Feature {
         
         parent.add(this);
         super.setVisible(true);
+                
+        // figure out prev_data
+        JSONArray pyroData = new JSONObject(prev_data).getJSONArray("features");
+        
+        JSONObject desiredObject = null;
+
+        for (int i = 0; i < pyroData.length(); i++) {
+            JSONObject obj = pyroData.getJSONObject(i);
+            if (obj.getInt("id") == id) {
+                desiredObject = obj;
+                break; // Exit the loop once the object is found
+            }
+        }
+        
+        this.data = desiredObject.getJSONObject("data");
+        
+        // Now you can use the desiredObject for further processing
+        if (desiredObject != null) {
+            String type = this.data.getString("action");
+            
+            switch (type) {
+                case "main":
+                    // Handle the case where type is "main"
+                    System.out.println("Main pyro device found");
+                    // Perform actions specific to the main pyro device
+                    actionSelector.setSelectedIndex(1);
+                    break;
+                case "drogue":
+                    // Handle the case where type is "drogue"
+                    System.out.println("Drogue pyro device found");
+                    // Perform actions specific to the drogue pyro device
+                    actionSelector.setSelectedIndex(2);
+                    break;
+                case "custom":
+                    // Handle all other cases
+                    System.out.println("Custom pyro device found");
+                    // Perform actions appropriate for other types
+                    actionSelector.setSelectedIndex(3);
+                    break;
+                default:
+                    // Handle all other cases
+                    System.out.println("Not detected");
+                    // Perform actions appropriate for other types
+                    actionSelector.setSelectedIndex(0);
+            }
+        } else {
+            // Handle the case where the object with the specified ID was not found
+            System.out.println("Object with ID " + id + " not found");
+        }
+        
+        isLoading = false;
+        
     }
     
     @Override
-    public String generateJson() {
-        String output = "{'id': " + id +  ", 'type': 'PYRO', 'data': {";
-        if (actionSelector.getSelectedIndex() == 0) {
-            output = output + " 'action': 'none' }";
-        }
-        if (actionSelector.getSelectedIndex() == 1) {
-            output = output + " 'action': 'main', " + selectedOption.generateJson();
-        }
-        if (actionSelector.getSelectedIndex() == 2) {
-            output = output + " 'action': 'drogue', " + selectedOption.generateJson();
-        }
-        if (actionSelector.getSelectedIndex() == 3) {
-            output = output + " 'action': 'custom', " + selectedOption.generateJson();
-        }
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("id", id);
+        output.put("type", "PYRO");
         
-        output = output + "}, ";
+        output.put("data", selectedOption.generateJson());
+        
         return output;
     }
 
@@ -152,17 +200,18 @@ public class PyroCharge extends Feature {
 
     private void actionSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_actionSelectorItemStateChanged
         // Code to open pyro feature windows
+        
         if (selectedOption != null) {
             selectedOption.setVisible(false);
         }
         if (actionSelector.getSelectedIndex() == 1) {
-            selectedOption = new MainChute(this);
+            selectedOption = new MainChute(this, data, isLoading);
         }
         if (actionSelector.getSelectedIndex() == 2) {
-            selectedOption = new DrogueChute(this);
+            selectedOption = new DrogueChute(this, data, isLoading);
         }
         if (actionSelector.getSelectedIndex() == 3) {
-            selectedOption = new CustomPyro(this);
+            selectedOption = new CustomPyro(this, data, isLoading);
         }
     }//GEN-LAST:event_actionSelectorItemStateChanged
 

@@ -5,13 +5,14 @@
 package com.circuitwizardry.missioncontrol.features;
 
 import javax.swing.JPanel;
+import org.json.JSONObject;
 
 /**
  *
  * @author marce
  */
 public class Feature extends JPanel {
-    public String generateJson() {
-        return "No JSON specified.";
+    public JSONObject generateJson() {
+        return new JSONObject("{}");
     }
 }

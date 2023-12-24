@@ -7,6 +7,7 @@ package com.circuitwizardry.missioncontrol.features;
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import com.circuitwizardry.missioncontrol.features.gpio.*;
 import javax.swing.*;
+import org.json.JSONObject;
 
 /**
  *
@@ -35,22 +36,11 @@ public class GPIO extends Feature {
     }
     
     @Override
-    public String generateJson() {
-        String output = "{'id': " + id +  ", 'type': 'GPIO', 'data': {";
-        if (actionSelector.getSelectedIndex() == 0) {
-            output = output + " 'action': 'none' }";
-        }
-        if (actionSelector.getSelectedIndex() == 1) {
-            output = output + " 'action': 'other', " + selectedOption.generateJson();
-        }
-        if (actionSelector.getSelectedIndex() == 2) {
-            output = output + " 'action': 'output', " + selectedOption.generateJson();
-        }
-        if (actionSelector.getSelectedIndex() == 3) {
-            output = output + " 'action': 'input', " + selectedOption.generateJson();
-        }
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("id", id);
+        output.put("type", "GPIO");
         
-        output = output + "}, ";
         return output;
     }
 

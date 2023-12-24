@@ -6,6 +6,7 @@ package com.circuitwizardry.missioncontrol.features;
 
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import javax.swing.*;
+import org.json.JSONObject;
 
 /**
  *
@@ -33,8 +34,12 @@ public class ThrustVectoring extends Feature {
     }
     
     @Override
-    public String generateJson() {
-        return "{ 'id': " + id + ", 'type': 'TVC' }";
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("id", id);
+        output.put("type", "TVC");
+        
+        return output;
     }
 
     /**

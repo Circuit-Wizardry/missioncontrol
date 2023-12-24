@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.json.JSONArray;
+import org.json.JSONObject;
 /**
  *
  * @author marce
@@ -45,6 +47,39 @@ public class ProgramScreen extends javax.swing.JFrame {
         dataPanel.setVisible(false);
         updateComSelector();
     }
+    
+    
+    private String readDataFromComPort() throws InterruptedException {
+        
+        Thread.sleep(500);
+        
+        System.out.println("reading files");
+        StringBuilder builder = new StringBuilder();
+        
+        int cnt = 0;
+        
+        int ba = port.bytesAvailable();
+        while (ba > 0) {
+            byte[] readBuffer = new byte[ba];
+            port.readBytes(readBuffer, readBuffer.length);
+            for (int i = 0; i < readBuffer.length; i++) {
+                builder.append((char)readBuffer[i]);
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ba = port.bytesAvailable();
+            System.out.println(ba);
+            cnt += 1;
+            if (cnt > 1000) {
+                break;
+            }
+        }
+                
+        return builder.toString(); 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,6 +97,7 @@ public class ProgramScreen extends javax.swing.JFrame {
         generateJson = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataPanel = new javax.swing.JPanel();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,14 +135,16 @@ public class ProgramScreen extends javax.swing.JFrame {
         dataPanel.setLayout(dataPanelLayout);
         dataPanelLayout.setHorizontalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 890, Short.MAX_VALUE)
+            .addGap(0, 878, Short.MAX_VALUE)
         );
         dataPanelLayout.setVerticalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
+            .addGap(0, 329, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(dataPanel);
+
+        jCheckBox1.setText("Use absolute altitude");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,45 +153,47 @@ public class ProgramScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(connectionStatus))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(connectButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(connectionStatus)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(connectButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 392, Short.MAX_VALUE)
+                                .addComponent(jCheckBox1))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
                 .addComponent(generateJson)
-                .addGap(34, 34, 34))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(399, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(generateJson, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox1)
                             .addComponent(connectButton)
                             .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(connectionStatus))
-                    .addComponent(generateJson, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(305, Short.MAX_VALUE))
+                        .addComponent(connectionStatus)))
+                .addContainerGap(351, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGap(94, 94, 94)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -205,9 +245,20 @@ public class ProgramScreen extends javax.swing.JFrame {
             
             // Handling code for first connect if STARLIGHT is detected
             
+            // all boards will send some file right after connect: this function is to read that file
+            
             if (boardId == 99) {
                 // for response
                 port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                String prev_data = "";
+                try {
+                    prev_data = readDataFromComPort();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ProgramScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                System.out.println(prev_data);
                 
                 generateJson.setVisible(true);
                 dataPanel.setVisible(true);
@@ -216,8 +267,8 @@ public class ProgramScreen extends javax.swing.JFrame {
 
                 // Add two JPanels for EJECTION and IGNITER charges
                 
-                PyroCharge ejection = new PyroCharge(dataPanel, 0, "EJECTION");
-                PyroCharge igniter = new PyroCharge(dataPanel, 1, "IGNITER");
+                PyroCharge ejection = new PyroCharge(dataPanel, 0, "EJECTION", prev_data);
+                PyroCharge igniter = new PyroCharge(dataPanel, 1, "IGNITER", prev_data);
                 GPIO gp0 = new GPIO(dataPanel, 2, "GP0");
                 GPIO gp1 = new GPIO(dataPanel, 3, "GP1");
                 GPIO gp16 = new GPIO(dataPanel, 4, "GP16");
@@ -249,18 +300,19 @@ public class ProgramScreen extends javax.swing.JFrame {
 
     private void generateJsonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateJsonActionPerformed
         // TODO add your handling code here:
-        String featureJson = "";
+        JSONObject json = new JSONObject();
+        JSONArray jsonFeatures = new JSONArray();
+        
+        json.put("startupMode", 0);
+        
         for (int i = 0; i < features.size(); i++) {
-            Feature feature = features.get(i);
-            featureJson = featureJson + feature.generateJson();
+            jsonFeatures.put(features.get(i).generateJson());
         }
-        String generatedJson = "{ 'startupMode': 0, 'features': [ " + featureJson + " ] }";
-        System.out.println(generatedJson);
-        ProgramConfirm confirm = new ProgramConfirm(generatedJson, port);
-//        byte[] b = generatedJson.getBytes();
-//        port.writeBytes(new byte[]{0x11, 0x13}, 2);
-//        port.writeBytes(b, b.length);
-//        System.out.println("sent");
+        
+        json.put("features", jsonFeatures);
+        
+        System.out.println(json.toString());
+        ProgramConfirm confirm = new ProgramConfirm(json.toString(), port);
     }//GEN-LAST:event_generateJsonActionPerformed
 
     /**
@@ -297,6 +349,7 @@ public class ProgramScreen extends javax.swing.JFrame {
     private javax.swing.JLabel connectionStatus;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JButton generateJson;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

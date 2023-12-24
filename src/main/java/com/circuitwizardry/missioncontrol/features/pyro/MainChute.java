@@ -5,7 +5,8 @@
 package com.circuitwizardry.missioncontrol.features.pyro;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -18,19 +19,28 @@ public class MainChute extends PyroFeature {
     /**
      * Creates new form MainChute
      * @param parent
+     * @param prev_data
      */
-    public MainChute(JPanel parent) {
+    public MainChute(JPanel parent, JSONObject data, boolean isLoading) {
         this.setSize(400, 90);
         this.setLocation(250, 5);
         initComponents();
         parent.add(this);
         super.setVisible(true);
+        
+        
+        // data initialize
+        if (!isLoading) return;
+        height.setValue(data.getInt("height"));
+        apogeeCheck.setSelected(data.getBoolean("apogee"));
     }
     
     @Override
-    public String generateJson() {
-        String output = "'apogee': '" + atApogee + "', ";
-        output = output + "'height': " + height.getValue() + " }";
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("action", "main");
+        output.put("apogee", apogeeCheck.isSelected());
+        output.put("height", height.getValue());
         return output;
     }
 

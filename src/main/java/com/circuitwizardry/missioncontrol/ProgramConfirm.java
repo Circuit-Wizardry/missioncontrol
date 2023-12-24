@@ -5,6 +5,7 @@
 package com.circuitwizardry.missioncontrol;
 
 import com.fazecast.jSerialComm.SerialPort;
+import org.json.JSONObject;
 
 /**
  *
@@ -21,6 +22,7 @@ public class ProgramConfirm extends javax.swing.JFrame {
         initComponents();
         this.setVisible(true);
         this.setSize(350, 300);
+        invalidJSON.setVisible(false);
         codeFrame.setText(text);
         this.port = port;
     }
@@ -40,12 +42,21 @@ public class ProgramConfirm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         launchMode = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
+        invalidJSON = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         codeFrame.setColumns(20);
         codeFrame.setLineWrap(true);
         codeFrame.setRows(5);
+        codeFrame.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                codeFrameKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                codeFrameKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(codeFrame);
 
         writeButton.setText("Write");
@@ -72,6 +83,9 @@ public class ProgramConfirm extends javax.swing.JFrame {
             }
         });
 
+        invalidJSON.setForeground(new java.awt.Color(255, 0, 51));
+        invalidJSON.setText("INVALID JSON");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,15 +94,16 @@ public class ProgramConfirm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(writeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(launchMode)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 72, Short.MAX_VALUE)))
+                                .addComponent(jLabel2))
+                            .addComponent(invalidJSON, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,7 +113,9 @@ public class ProgramConfirm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(invalidJSON)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(launchMode)
                     .addComponent(jLabel2))
@@ -124,15 +141,24 @@ public class ProgramConfirm extends javax.swing.JFrame {
 
     private void launchModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchModeActionPerformed
         // TODO add your handling code here:
-        String code = codeFrame.getText();
-        int index = code.indexOf("startupMode") + 4 + 10;
-        if (launchMode.isSelected()) {
-            code = code.substring(0, index) + "1" + code.substring(index + 1);
-        } else {
-            code = code.substring(0, index) + "0" + code.substring(index + 1);
-        }
-        codeFrame.setText(code);
+        JSONObject code = new JSONObject(codeFrame.getText());
+        code.put("startupMode", launchMode.isSelected() ? 1 : 0);
+        codeFrame.setText(code.toString());
     }//GEN-LAST:event_launchModeActionPerformed
+
+    private void codeFrameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codeFrameKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_codeFrameKeyTyped
+
+    private void codeFrameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codeFrameKeyReleased
+        try {
+            JSONObject code = new JSONObject(codeFrame.getText());
+            invalidJSON.setVisible(false);
+        } catch (org.json.JSONException e) {
+            invalidJSON.setVisible(true);
+        }
+    }//GEN-LAST:event_codeFrameKeyReleased
 
     /**
      * @param args the command line arguments
@@ -164,6 +190,7 @@ public class ProgramConfirm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea codeFrame;
+    private javax.swing.JLabel invalidJSON;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
