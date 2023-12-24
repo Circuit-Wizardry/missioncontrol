@@ -7,9 +7,12 @@ import com.fazecast.jSerialComm.*;
 import com.circuitwizardry.missioncontrol.features.*;
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,6 +49,20 @@ public class ProgramScreen extends javax.swing.JFrame {
         generateJson.setVisible(false);
         dataPanel.setVisible(false);
         updateComSelector();
+        
+        
+        // DISCONNECT ON CLOSE
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                if (connected) {
+                    port.writeBytes(new byte[]{0x11, 0x16}, 2);
+                    port.closePort();
+                }
+                dispose();
+            }
+        });
     }
     
     
@@ -98,6 +115,8 @@ public class ProgramScreen extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         dataPanel = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
+        refreshButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,6 +165,20 @@ public class ProgramScreen extends javax.swing.JFrame {
 
         jCheckBox1.setText("Use absolute altitude");
 
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,10 +190,14 @@ public class ProgramScreen extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(connectionStatus)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(backButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(connectButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(refreshButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 392, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 236, Short.MAX_VALUE)
                                 .addComponent(jCheckBox1))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -186,7 +223,9 @@ public class ProgramScreen extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCheckBox1)
                             .addComponent(connectButton)
-                            .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(refreshButton)
+                            .addComponent(backButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(connectionStatus)))
                 .addContainerGap(351, Short.MAX_VALUE))
@@ -315,6 +354,22 @@ public class ProgramScreen extends javax.swing.JFrame {
         ProgramConfirm confirm = new ProgramConfirm(json.toString(), port);
     }//GEN-LAST:event_generateJsonActionPerformed
 
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        // TODO add your handling code here:
+        updateComSelector();
+    }//GEN-LAST:event_refreshButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        if (connected) {
+            port.writeBytes(new byte[]{0x11, 0x16}, 2);
+            port.closePort();   
+        }
+        JFrame mc = new MainScreen();
+        mc.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -344,6 +399,7 @@ public class ProgramScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JComboBox<String> comSelector;
     private javax.swing.JButton connectButton;
     private javax.swing.JLabel connectionStatus;
@@ -352,5 +408,6 @@ public class ProgramScreen extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton refreshButton;
     // End of variables declaration//GEN-END:variables
 }

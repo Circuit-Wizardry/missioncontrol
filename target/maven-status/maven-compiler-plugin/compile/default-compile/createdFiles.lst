@@ -4,6 +4,7 @@ com\circuitwizardry\missioncontrol\features\AudioCues.class
 com\circuitwizardry\missioncontrol\features\pyro\CustomPyro$3.class
 com\circuitwizardry\missioncontrol\ProgramConfirm$2.class
 com\circuitwizardry\missioncontrol\Debrief.class
+com\circuitwizardry\missioncontrol\ProgramScreen$5.class
 com\circuitwizardry\missioncontrol\features\ThrustVectoring$2.class
 com\circuitwizardry\missioncontrol\Debrief$1.class
 com\circuitwizardry\missioncontrol\features\gpio\EmulatePyro$2.class
@@ -12,6 +13,7 @@ com\circuitwizardry\missioncontrol\features\GPIO.class
 com\circuitwizardry\missioncontrol\features\GPIO$5.class
 com\circuitwizardry\missioncontrol\features\AudioCues$1.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$1.class
+com\circuitwizardry\missioncontrol\ProgramScreen$6.class
 com\circuitwizardry\missioncontrol\features\pyro\CustomPyro$4.class
 com\circuitwizardry\missioncontrol\features\PyroCharge.class
 com\circuitwizardry\missioncontrol\MainScreen$1.class
@@ -45,6 +47,7 @@ com\circuitwizardry\missioncontrol\features\GPIO$3.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$6.class
 com\circuitwizardry\missioncontrol\ProgramScreen$1.class
 com\circuitwizardry\missioncontrol\features\pyro\MainChute.class
+com\circuitwizardry\missioncontrol\ProgramScreen$4.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$3.class
 com\circuitwizardry\missioncontrol\ProgramConfirm$3.class
 com\circuitwizardry\missioncontrol\features\pyro\CustomPyro.class
