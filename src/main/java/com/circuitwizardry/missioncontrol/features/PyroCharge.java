@@ -15,7 +15,7 @@ import org.json.JSONObject;
  */
 public class PyroCharge extends Feature {
 
-    PyroFeature selectedOption;
+    PyroFeature selectedOption = new PyroFeature();
     JSONObject data = new JSONObject();
     int id;
     boolean isLoading = true;
@@ -50,10 +50,9 @@ public class PyroCharge extends Feature {
             }
         }
         
-        this.data = desiredObject.getJSONObject("data");
-        
         // Now you can use the desiredObject for further processing
-        if (desiredObject != null) {
+        try {
+            this.data = desiredObject.getJSONObject("data");
             String type = this.data.getString("action");
             
             switch (type) {
@@ -81,9 +80,8 @@ public class PyroCharge extends Feature {
                     // Perform actions appropriate for other types
                     actionSelector.setSelectedIndex(0);
             }
-        } else {
-            // Handle the case where the object with the specified ID was not found
-            System.out.println("Object with ID " + id + " not found");
+        } catch (org.json.JSONException e) {
+            actionSelector.setSelectedIndex(0);
         }
         
         isLoading = false;
@@ -203,6 +201,7 @@ public class PyroCharge extends Feature {
         
         if (selectedOption != null) {
             selectedOption.setVisible(false);
+            selectedOption = new PyroFeature();
         }
         if (actionSelector.getSelectedIndex() == 1) {
             selectedOption = new MainChute(this, data, isLoading);

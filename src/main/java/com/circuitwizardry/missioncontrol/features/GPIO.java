@@ -7,6 +7,7 @@ package com.circuitwizardry.missioncontrol.features;
 import com.circuitwizardry.missioncontrol.features.pyro.*;
 import com.circuitwizardry.missioncontrol.features.gpio.*;
 import javax.swing.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -15,8 +16,11 @@ import org.json.JSONObject;
  */
 public class GPIO extends Feature {
 
-    GPIOFeature selectedOption;
+    GPIOFeature selectedOption = new GPIOFeature();
     int id;
+    boolean isLoading = true;
+    int pin = 0;
+    JSONObject data = new JSONObject();
     
     /**
      * Creates new form PyroCharge
@@ -24,15 +28,63 @@ public class GPIO extends Feature {
      * @param num
      * @param identifier
      */
-    public GPIO(JPanel parent, int num, String identifier) {
+    public GPIO(JPanel parent, int num, int pin, String identifier, String prev_data) {
         this.setSize(696, 100);
         this.setLocation(0, num*100);
         initComponents();
         this.id = num;
+        this.pin = pin;
         infoLabel.setText(identifier);
         
         parent.add(this);
         super.setVisible(true);
+        
+        // figure out prev_data
+        JSONArray pyroData = new JSONObject(prev_data).getJSONArray("features");
+        
+        JSONObject desiredObject = null;
+
+        for (int i = 0; i < pyroData.length(); i++) {
+            JSONObject obj = pyroData.getJSONObject(i);
+            if (obj.getInt("id") == id) {
+                desiredObject = obj;
+                break; // Exit the loop once the object is found
+            }
+        }
+        
+        // Now you can use the desiredObject for further processing
+        try {
+            this.data = desiredObject.getJSONObject("data");
+            String type = this.data.getString("action");
+            
+            switch (type) {
+                case "custom":
+                    // Handle the case where type is "main"
+                    System.out.println("Pyro Emulate found");
+                    // Perform actions specific to the main pyro device
+                    actionSelector.setSelectedIndex(1);
+                    break;
+                case "output":
+                    // Handle the case where type is "drogue"
+                    System.out.println("Output found");
+                    // Perform actions specific to the drogue pyro device
+                    actionSelector.setSelectedIndex(2);
+                    break;
+                case "input":
+                    // Handle the case where type is "drogue"
+                    System.out.println("Input found");
+                    // Perform actions specific to the drogue pyro device
+                    actionSelector.setSelectedIndex(3);
+                    break;
+                default:
+                    // Handle all other cases
+                    System.out.println("Not detected");
+                    // Perform actions appropriate for other types
+                    actionSelector.setSelectedIndex(0);
+            }
+        } catch (org.json.JSONException e) {
+            actionSelector.setSelectedIndex(0);
+        }
     }
     
     @Override
@@ -40,6 +92,8 @@ public class GPIO extends Feature {
         JSONObject output = new JSONObject();
         output.put("id", id);
         output.put("type", "GPIO");
+        
+        output.put("data", selectedOption.generateJson());
         
         return output;
     }
@@ -65,7 +119,7 @@ public class GPIO extends Feature {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Action:");
 
-        actionSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<none>", "Emulate Pyro Charge" }));
+        actionSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<none>", "Emulate Pyro Charge", "Output" }));
         actionSelector.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 actionSelectorItemStateChanged(evt);
@@ -145,12 +199,13 @@ public class GPIO extends Feature {
         // Code to open pyro feature windows
         if (selectedOption != null) {
             selectedOption.setVisible(false);
+            selectedOption = new GPIOFeature();
         }
         if (actionSelector.getSelectedIndex() == 1) {
             selectedOption = new EmulatePyro(this);
         }
         if (actionSelector.getSelectedIndex() == 2) {
-            selectedOption = new Output(this);
+            selectedOption = new Output(this, data, isLoading, pin);
         }
         if (actionSelector.getSelectedIndex() == 3) {
             selectedOption = new Input(this);

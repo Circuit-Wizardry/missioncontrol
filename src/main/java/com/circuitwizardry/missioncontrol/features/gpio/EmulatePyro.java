@@ -42,10 +42,10 @@ public class EmulatePyro extends GPIOFeature {
     @Override
     public JSONObject generateJson() {
         JSONObject output = new JSONObject();
-        output.put("action", "other");
+        output.put("action", "custom");
         output.put("trigger", jComboBox1.getSelectedIndex()+1);
-        output.put("value", custom.getText());
-        output.put("time", fireTime.getText());
+        output.put("value", Integer.parseInt(custom.getText()));
+        output.put("time", Integer.parseInt(fireTime.getText()));
 //        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
         return output;
     }

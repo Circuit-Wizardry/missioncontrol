@@ -5,6 +5,9 @@
 package com.circuitwizardry.missioncontrol;
 
 import com.fazecast.jSerialComm.SerialPort;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import org.json.JSONObject;
 
 /**
@@ -25,6 +28,15 @@ public class ProgramConfirm extends javax.swing.JFrame {
         invalidJSON.setVisible(false);
         codeFrame.setText(text);
         this.port = port;
+        
+        // DONT CLOSE ALL
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                dispose();
+            }
+        });
     }
 
     /**

@@ -65,6 +65,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setText("Welcome to C.W. Mission Control! This is your home base\nand programming central for any Circuit Wizardry flight computers.\nIf you don't know where to start, check out the \"Docs\" button. If you\nrecently purchased a C.W. flight computer and want to tune it, check\nout the \"Program\" button. If you just flew your flight computer and\nare ready to gather flight data, check out \"Debrief\".");

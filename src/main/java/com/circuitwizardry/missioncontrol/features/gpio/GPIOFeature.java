@@ -13,6 +13,6 @@ import org.json.JSONObject;
  */
 public class GPIOFeature extends JPanel {
     public JSONObject generateJson() {
-        return new JSONObject("{}");
+        return new JSONObject("{\"action\": \"none\"}");
     }
 }

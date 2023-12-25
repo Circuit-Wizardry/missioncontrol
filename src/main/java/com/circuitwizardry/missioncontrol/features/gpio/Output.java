@@ -4,25 +4,64 @@
  */
 package com.circuitwizardry.missioncontrol.features.gpio;
 
+import com.circuitwizardry.missioncontrol.features.gpio.output.Buzzer;
+import com.circuitwizardry.missioncontrol.features.gpio.output.LED;
+import com.circuitwizardry.missioncontrol.features.gpio.output.OutputFeature;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.json.JSONObject;
 
 /**
  *
  * @author marce
  */
 public class Output extends GPIOFeature {
-
+    OutputFeature selectedOption = new OutputFeature();
+    JSONObject data = new JSONObject();
+    int pin = 0;
+    boolean isLoading = true;
+    
     /**
      * Creates new form Output
      * @param parent
      */
-    public Output(JPanel parent) {
+    public Output(JPanel parent, JSONObject data, boolean isLoading, int pin) {
         this.setSize(400, 90);
         this.setLocation(250, 5);
         initComponents();
         parent.add(this);
         super.setVisible(true);
+        this.pin = pin;
+        
+        this.data = data;
+        
+        if (!isLoading) return;
+        try {
+            JSONObject outputFeature = this.data.getJSONObject("data");
+            String type = outputFeature.getString("action");
+            
+            switch (type) {
+                case "buzzer":
+                    // Handle the case where type is "main"
+                    System.out.println("Buzzer found");
+                    // Perform actions specific to the main pyro device
+                    actionSelector.setSelectedIndex(1);
+                    break;
+                case "led":
+                    // Handle the case where type is "drogue"
+                    System.out.println("LED found");
+                    // Perform actions specific to the drogue pyro device
+                    actionSelector.setSelectedIndex(2);
+                    break;
+                default:
+                    // Handle all other cases
+                    System.out.println("Not detected");
+                    // Perform actions appropriate for other types
+                    actionSelector.setSelectedIndex(0);
+            }
+        } catch (org.json.JSONException e) {
+            actionSelector.setSelectedIndex(0);
+        }
     }
 
     /**
@@ -35,11 +74,21 @@ public class Output extends GPIOFeature {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        actionSelector = new javax.swing.JComboBox<>();
 
         jLabel1.setText("Output");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<none>", "PREFAB: Buzzer", "PREFAB: LED", "PWM" }));
+        actionSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<none>", "Buzzer", "LED" }));
+        actionSelector.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                actionSelectorItemStateChanged(evt);
+            }
+        });
+        actionSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actionSelectorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -49,8 +98,8 @@ public class Output extends GPIOFeature {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(278, Short.MAX_VALUE))
+                    .addComponent(actionSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(318, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -58,14 +107,40 @@ public class Output extends GPIOFeature {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(actionSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void actionSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionSelectorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actionSelectorActionPerformed
+
+    private void actionSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_actionSelectorItemStateChanged
+        // Code to open pyro feature windows
+        if (selectedOption != null) {
+            selectedOption.setVisible(false);
+            selectedOption = new OutputFeature();
+        }
+        if (actionSelector.getSelectedIndex() == 1) {
+            selectedOption = new Buzzer(this, data, isLoading);
+        }
+        if (actionSelector.getSelectedIndex() == 2) {
+            selectedOption = new LED(this, data, isLoading);
+        }
+    }//GEN-LAST:event_actionSelectorItemStateChanged
+    
+    @Override
+    public JSONObject generateJson() {
+        JSONObject output = new JSONObject();
+        output.put("action", "output");
+        output.put("pin", pin);
+        output.put("data", selectedOption.generateJson());
+        return output;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> actionSelector;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

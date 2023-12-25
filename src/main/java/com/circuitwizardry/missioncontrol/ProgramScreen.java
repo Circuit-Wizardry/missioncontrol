@@ -308,13 +308,13 @@ public class ProgramScreen extends javax.swing.JFrame {
                 
                 PyroCharge ejection = new PyroCharge(dataPanel, 0, "EJECTION", prev_data);
                 PyroCharge igniter = new PyroCharge(dataPanel, 1, "IGNITER", prev_data);
-                GPIO gp0 = new GPIO(dataPanel, 2, "GP0");
-                GPIO gp1 = new GPIO(dataPanel, 3, "GP1");
-                GPIO gp16 = new GPIO(dataPanel, 4, "GP16");
-                GPIO gp17 = new GPIO(dataPanel, 5, "GP17");
-                GPIO gp18 = new GPIO(dataPanel, 6, "GP18");
-                GPIO gp19 = new GPIO(dataPanel, 7, "GP19");
-                ThrustVectoring tvc = new ThrustVectoring(dataPanel, 8);
+                GPIO gp0 = new GPIO(dataPanel, 2, 0, "GP0", prev_data);
+                GPIO gp1 = new GPIO(dataPanel, 3, 1, "GP1", prev_data);
+                GPIO gp16 = new GPIO(dataPanel, 4, 16, "GP16", prev_data);
+                GPIO gp17 = new GPIO(dataPanel, 5, 17, "GP17", prev_data);
+                GPIO gp18 = new GPIO(dataPanel, 6, 18, "GP18", prev_data);
+                GPIO gp19 = new GPIO(dataPanel, 7, 19, "GP19", prev_data);
+//                ThrustVectoring tvc = new ThrustVectoring(dataPanel, 8);
                 
                 features.add(ejection);
                 features.add(igniter);
@@ -324,7 +324,7 @@ public class ProgramScreen extends javax.swing.JFrame {
                 features.add(gp17);
                 features.add(gp18);
                 features.add(gp19);
-                features.add(tvc);
+//                features.add(tvc);
                 
                 dataPanel.setPreferredSize(new Dimension(850, features.size() * 100));
                 dataPanel.revalidate();
