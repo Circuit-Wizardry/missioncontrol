@@ -36,22 +36,22 @@ public class PyroCharge extends Feature {
         
         parent.add(this);
         super.setVisible(true);
-                
-        // figure out prev_data
-        JSONArray pyroData = new JSONObject(prev_data).getJSONArray("features");
-        
-        JSONObject desiredObject = null;
-
-        for (int i = 0; i < pyroData.length(); i++) {
-            JSONObject obj = pyroData.getJSONObject(i);
-            if (obj.getInt("id") == id) {
-                desiredObject = obj;
-                break; // Exit the loop once the object is found
-            }
-        }
         
         // Now you can use the desiredObject for further processing
         try {
+            // figure out prev_data
+            JSONArray pyroData = new JSONObject(prev_data).getJSONArray("features");
+
+            JSONObject desiredObject = null;
+
+            for (int i = 0; i < pyroData.length(); i++) {
+                JSONObject obj = pyroData.getJSONObject(i);
+                if (obj.getInt("id") == id) {
+                    desiredObject = obj;
+                    break; // Exit the loop once the object is found
+                }
+            }
+            
             this.data = desiredObject.getJSONObject("data");
             String type = this.data.getString("action");
             
