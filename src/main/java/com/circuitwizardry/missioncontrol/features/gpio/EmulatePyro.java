@@ -18,25 +18,33 @@ public class EmulatePyro extends GPIOFeature {
     /**
      * Creates new form CustomPyro
      * @param parent
+     * @param data
      */
-    public EmulatePyro(JPanel parent) {
+    public EmulatePyro(JPanel parent, JSONObject data, boolean isLoading) {
         this.setSize(400, 90);
         this.setLocation(250, 5);
         initComponents();
         parent.add(this);
         super.setVisible(true);
+        
+        // data initialize
+        if (!isLoading) return;
+        jComboBox1.setSelectedIndex(data.getInt("trigger")-1);
+        custom.setText(Integer.toString(data.getInt("value")));
+        fireTime.setText(Integer.toString(data.getInt("time")));
     }
     
+    // dumbest function ive ever written
     public boolean isInteger(String s) {
-        try { 
-            Integer.parseInt(s); 
-        } catch(NumberFormatException e) { 
-            return false; 
-        } catch(NullPointerException e) {
-            return false;
-        }
-        // only got here if we didn't return false
-        return true;
+    try { 
+        Integer.parseInt(s); 
+    } catch(NumberFormatException e) { 
+        return false; 
+    } catch(NullPointerException e) {
+        return false;
+    }
+    // only got here if we didn't return false
+    return true;
     }
     
     @Override
@@ -46,6 +54,8 @@ public class EmulatePyro extends GPIOFeature {
         output.put("trigger", jComboBox1.getSelectedIndex()+1);
         output.put("value", Integer.parseInt(custom.getText()));
         output.put("time", Integer.parseInt(fireTime.getText()));
+        
+        
 //        String output = "'trigger': " + (jComboBox1.getSelectedIndex()+1) + ", 'value': " + custom.getText() + ", 'time': " + fireTime.getText() + " }";
         return output;
     }
@@ -68,9 +78,9 @@ public class EmulatePyro extends GPIOFeature {
         custom = new javax.swing.JTextField();
         errorText = new javax.swing.JLabel();
 
-        jLabel1.setText("Custom Action");
+        jLabel1.setText("Custom Pyro Charge");
 
-        jLabel2.setText("Action will be fired");
+        jLabel2.setText("Pyro will be fired");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "at apogee", "at ___ feet traveling downwards", "at ___ feet traveling upwards", "(WIP) ___ seconds after apogee", "at launch detected", "(WIP) ___ seconds after launch detected", "at motor burnout", "(WIP) ___ seconds after motor burnout", "at landing", "(WIP) ___ seconds after landing" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {

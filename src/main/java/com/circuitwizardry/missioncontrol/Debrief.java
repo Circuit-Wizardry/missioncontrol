@@ -43,6 +43,8 @@ public class Debrief extends javax.swing.JFrame {
     boolean connected;
     SerialPort port;
     
+    String[] triggerNames = {"Altitude", "Altitude", "Delayed", "Launch", "Delayed", "Burnout", "Delayed", "Landing", "Delayed"};
+    
     /**
      * Creates new form Debrief
      */
@@ -246,6 +248,13 @@ public class Debrief extends javax.swing.JFrame {
             }
         }
         
+        double minimum = dataFinal.get(0);
+        for (int i = 1; i < dataFinal.size(); i++) {
+            if (minimum > dataFinal.get(i)) {
+                minimum = dataFinal.get(i);
+            }
+        }
+        
         ArrayList<Double> time = new ArrayList<Double>();
         ArrayList<Annotation> annotations = new ArrayList<Annotation>();
         for (double i = 0; i < data.size(); i++) {
@@ -254,16 +263,16 @@ public class Debrief extends javax.swing.JFrame {
                     case 1:
                         System.out.println("found annotation!");
                         annotations.add(new AnnotationLine(i, true, false));
-                        annotations.add(new AnnotationText("Launch", i - (data.size() / 15), maximum, false));
+                        annotations.add(new AnnotationText("Launch", i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
                     case 2:
                         System.out.println("found apogee!");
                         annotations.add(new AnnotationLine(i, true, false));
-                        annotations.add(new AnnotationText("Apogee", i - (data.size() / 15), maximum, false));
-                    case 9:
-                        System.out.println("found event!");
-                        annotations.add(new AnnotationLine(i, true, false));
-                        annotations.add(new AnnotationText("Trigger", i - (data.size() / 15), maximum, false));
-
+                        annotations.add(new AnnotationText("Apogee", i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
+            }
+            if (Integer.parseInt(data.get((int) i)[0]) >= 10) {
+                System.out.println("found event!");
+                annotations.add(new AnnotationLine(i, true, false));
+                annotations.add(new AnnotationText(triggerNames[Integer.parseInt(data.get((int) i)[0]) - 10], i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
             }
             time.add(i);
         }

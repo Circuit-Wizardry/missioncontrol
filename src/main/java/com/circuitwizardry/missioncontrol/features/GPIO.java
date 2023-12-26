@@ -202,7 +202,7 @@ public class GPIO extends Feature {
             selectedOption = new GPIOFeature();
         }
         if (actionSelector.getSelectedIndex() == 1) {
-            selectedOption = new EmulatePyro(this);
+            selectedOption = new EmulatePyro(this, data, isLoading);
         }
         if (actionSelector.getSelectedIndex() == 2) {
             selectedOption = new Output(this, data, isLoading, pin);

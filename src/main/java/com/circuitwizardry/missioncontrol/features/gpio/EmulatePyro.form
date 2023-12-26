@@ -79,12 +79,12 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Custom Action"/>
+        <Property name="text" type="java.lang.String" value="Custom Pyro Charge"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Action will be fired"/>
+        <Property name="text" type="java.lang.String" value="Pyro will be fired"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBox1">
