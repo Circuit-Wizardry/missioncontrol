@@ -28,9 +28,15 @@ public class CustomPyro extends PyroFeature {
         
         // data initialize
         if (!isLoading) return;
-        jComboBox1.setSelectedIndex(data.getInt("trigger")-1);
-        custom.setText(Integer.toString(data.getInt("value")));
-        fireTime.setText(Integer.toString(data.getInt("time")));
+        try {
+            jComboBox1.setSelectedIndex(data.getInt("trigger")-1);
+            custom.setText(Integer.toString(data.getInt("value")));
+            fireTime.setText(Integer.toString(data.getInt("time")));
+        } catch (org.json.JSONException e) {
+            jComboBox1.setSelectedIndex(0);
+            custom.setText("0");
+            fireTime.setText("0");
+        }
     }
     
     // dumbest function ive ever written

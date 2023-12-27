@@ -114,7 +114,6 @@ public class ProgramScreen extends javax.swing.JFrame {
         generateJson = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataPanel = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         refreshButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
 
@@ -163,8 +162,6 @@ public class ProgramScreen extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(dataPanel);
 
-        jCheckBox1.setText("Use absolute altitude");
-
         refreshButton.setText("Refresh");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,13 +193,11 @@ public class ProgramScreen extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(refreshButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 236, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1))))
+                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
                 .addComponent(generateJson)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,7 +216,6 @@ public class ProgramScreen extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
                             .addComponent(connectButton)
                             .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(refreshButton)
@@ -405,7 +399,6 @@ public class ProgramScreen extends javax.swing.JFrame {
     private javax.swing.JLabel connectionStatus;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JButton generateJson;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton refreshButton;

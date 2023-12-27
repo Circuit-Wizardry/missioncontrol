@@ -8,6 +8,8 @@ import com.circuitwizardry.missioncontrol.features.ThrustVectoring;
 import com.fazecast.jSerialComm.SerialPort;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import org.knowm.xchart.CSVImporter;
 import org.knowm.xchart.CSVImporter.DataOrientation;
 import org.knowm.xchart.*;
@@ -52,6 +55,20 @@ public class Debrief extends javax.swing.JFrame {
         initComponents();
         jPanel1.setVisible(false);
         updateComSelector();
+        
+        
+        // DISCONNECT ON CLOSE
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                if (connected) {
+                    port.writeBytes(new byte[]{0x11, 0x16}, 2);
+                    port.closePort();
+                }
+                dispose();
+            }
+        });
     }
     
     public void updateComSelector() {
@@ -81,6 +98,8 @@ public class Debrief extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         downloadGraph = new javax.swing.JButton();
         imageView = new javax.swing.JCheckBox();
+        refreshButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         jLabel2.setText("jLabel2");
 
@@ -89,7 +108,12 @@ public class Debrief extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("CW MissionControl Debrief");
 
-        comSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "COM SELECTOR LONG NAME" }));
+        comSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comSelectorActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Connect");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -116,45 +140,66 @@ public class Debrief extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(downloadGraph)
-                    .addComponent(jCheckBox1)
-                    .addComponent(imageView))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addComponent(imageView)
+                .addGap(31, 31, 31)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(downloadGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(imageView)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(downloadGraph)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imageView)
+                    .addComponent(jCheckBox1)
+                    .addComponent(downloadGraph))
+                .addGap(59, 59, 59))
         );
+
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(connectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(backButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 69, Short.MAX_VALUE)))
+                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(connectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,11 +208,13 @@ public class Debrief extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(backButton)
+                    .addComponent(refreshButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectionStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -235,10 +282,13 @@ public class Debrief extends javax.swing.JFrame {
     
     private void showGraph(ArrayList<String[]> data, int dataIndex, String graphName, String graphX) {
         
-        ArrayList<Double> dataFinal = new ArrayList<Double>();
+        double first_timestamp = Double.parseDouble(data.get(0)[1]);
         
+        ArrayList<Double> dataFinal = new ArrayList<Double>();
+        ArrayList<Double> time = new ArrayList<Double>();
         for (int i = 0; i < data.size(); i++) {
             dataFinal.add(Double.parseDouble(data.get(i)[dataIndex]));
+            time.add(Double.parseDouble(data.get(i)[1]) - first_timestamp);
         }
         
         double maximum = dataFinal.get(0);
@@ -255,26 +305,26 @@ public class Debrief extends javax.swing.JFrame {
             }
         }
         
-        ArrayList<Double> time = new ArrayList<Double>();
         ArrayList<Annotation> annotations = new ArrayList<Annotation>();
         for (double i = 0; i < data.size(); i++) {
             // annotations
+            int integerI = (int) i;
             switch (Integer.parseInt(data.get((int) i)[0])) {
                     case 1:
                         System.out.println("found annotation!");
-                        annotations.add(new AnnotationLine(i, true, false));
-                        annotations.add(new AnnotationText("Launch", i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
+                        annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
+                        annotations.add(new AnnotationText("Launch", Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
                     case 2:
                         System.out.println("found apogee!");
-                        annotations.add(new AnnotationLine(i, true, false));
-                        annotations.add(new AnnotationText("Apogee", i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
+                        annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
+                        annotations.add(new AnnotationText("Apogee", Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
             }
             if (Integer.parseInt(data.get((int) i)[0]) >= 10) {
                 System.out.println("found event!");
-                annotations.add(new AnnotationLine(i, true, false));
-                annotations.add(new AnnotationText(triggerNames[Integer.parseInt(data.get((int) i)[0]) - 10], i - (data.size() / 15), (float)Math.random() * (maximum - minimum) + minimum, false));
+                annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
+                annotations.add(new AnnotationText(triggerNames[Integer.parseInt(data.get((int) i)[0]) - 10], Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
             }
-            time.add(i);
+//            time.add(i);
         }
         
         // Create Chart
@@ -386,15 +436,34 @@ public class Debrief extends javax.swing.JFrame {
         
         ArrayList<String[]> data = parseData();
         
-        showGraph(data, 1, "X Acceleration", "Acceleration");
-        showGraph(data, 2, "Y Acceleration", "Acceleration");
-        showGraph(data, 3, "Z Acceleration", "Acceleration");
-        showGraph(data, 4, "Altitude", "Altitude (meters)");
-        showGraph(data, 5, "Temperature", "Temperature (C)");
-        showGraph(data, 6, "Roll", "Roll");
-        showGraph(data, 7, "Pitch", "Pitch");
+        showGraph(data, 2, "X Acceleration", "Acceleration");
+        showGraph(data, 3, "Y Acceleration", "Acceleration");
+        showGraph(data, 4, "Z Acceleration", "Acceleration");
+        showGraph(data, 5, "Altitude", "Altitude (meters)");
+        showGraph(data, 6, "Temperature", "Temperature (C)");
+        showGraph(data, 7, "Roll", "Roll");
+        showGraph(data, 8, "Pitch", "Pitch");
         
     }//GEN-LAST:event_downloadGraphActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        if (connected) {
+            port.writeBytes(new byte[]{0x11, 0x16}, 2);
+            port.closePort();   
+        }
+        JFrame mc = new MainScreen();
+        mc.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        updateComSelector();
+    }//GEN-LAST:event_refreshButtonActionPerformed
+
+    private void comSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comSelectorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comSelectorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -432,6 +501,7 @@ public class Debrief extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JComboBox<String> comSelector;
     private javax.swing.JLabel connectionStatus;
     private javax.swing.JButton downloadGraph;
@@ -441,5 +511,6 @@ public class Debrief extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton refreshButton;
     // End of variables declaration//GEN-END:variables
 }
