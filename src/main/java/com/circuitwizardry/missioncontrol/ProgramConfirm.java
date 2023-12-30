@@ -5,8 +5,12 @@
 package com.circuitwizardry.missioncontrol;
 
 import com.fazecast.jSerialComm.SerialPort;
+import java.awt.Desktop;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import org.json.JSONObject;
 
@@ -148,7 +152,24 @@ public class ProgramConfirm extends javax.swing.JFrame {
     }//GEN-LAST:event_writeButtonActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        // TODO add your handling code here:
+        // Open C.W. Missioncontrol docs for the user:
+        String url = "https://circuitwizardry.com/missioncontrol/#modes";
+
+        if(Desktop.isDesktopSupported()){
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(new URI(url));
+            } catch (IOException | URISyntaxException e) {
+                
+            }
+        }else{
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec("xdg-open " + url);
+            } catch (IOException e) {
+                
+            }
+        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void launchModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchModeActionPerformed

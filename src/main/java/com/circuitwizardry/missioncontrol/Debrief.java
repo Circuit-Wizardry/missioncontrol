@@ -45,6 +45,7 @@ public class Debrief extends javax.swing.JFrame {
     
     boolean connected;
     SerialPort port;
+    int boardId = 0;
     
     String[] triggerNames = {"Altitude", "Altitude", "Delayed", "Launch", "Delayed", "Burnout", "Delayed", "Landing", "Delayed"};
     
@@ -250,7 +251,12 @@ public class Debrief extends javax.swing.JFrame {
         
         String flightData = builder.toString(); 
         
-        flightData = flightData.split("sc")[1];
+        if (boardId == 99) {
+            flightData = flightData.split("sc")[1];   
+        }
+        if (boardId == 100) {
+            flightData = flightData.split("sd")[1];   
+        }
         
         System.out.println(flightData);
         flightData = flightData.replace("b", "");
@@ -412,6 +418,8 @@ public class Debrief extends javax.swing.JFrame {
             }
             System.out.println(boardId);
             
+            this.boardId = boardId;
+            
             // Handling code for first connect if STARLIGHT is detected
             
             if (boardId == 99) {
@@ -420,6 +428,23 @@ public class Debrief extends javax.swing.JFrame {
                 
                 jPanel1.setVisible(true);
                 connectionStatus.setText("Connected to STARLIGHT board.");
+                // Add two JPanels for EJECTION and IGNITER charges
+            }
+            
+            if (boardId == 99) {
+                // for response
+                port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                jPanel1.setVisible(true);
+                connectionStatus.setText("Connected to STARLIGHT board.");
+                // Add two JPanels for EJECTION and IGNITER charges
+            }
+            if (boardId == 100) {
+                // for response
+                port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                jPanel1.setVisible(true);
+                connectionStatus.setText("Connected to STARLIGHT MINI board.");
                 // Add two JPanels for EJECTION and IGNITER charges
             }
         }
@@ -436,13 +461,20 @@ public class Debrief extends javax.swing.JFrame {
         
         ArrayList<String[]> data = parseData();
         
-        showGraph(data, 2, "X Acceleration", "Acceleration");
-        showGraph(data, 3, "Y Acceleration", "Acceleration");
-        showGraph(data, 4, "Z Acceleration", "Acceleration");
-        showGraph(data, 5, "Altitude", "Altitude (meters)");
-        showGraph(data, 6, "Temperature", "Temperature (C)");
-        showGraph(data, 7, "Roll", "Roll");
-        showGraph(data, 8, "Pitch", "Pitch");
+        if (boardId == 99) {
+            showGraph(data, 2, "X Acceleration", "Acceleration");
+            showGraph(data, 3, "Y Acceleration", "Acceleration");
+            showGraph(data, 4, "Z Acceleration", "Acceleration");
+            showGraph(data, 5, "Altitude", "Altitude (meters)");
+            showGraph(data, 6, "Temperature", "Temperature (C)");
+            showGraph(data, 7, "Roll", "Roll");
+            showGraph(data, 8, "Pitch", "Pitch"); 
+        }
+        if (boardId == 100) {
+            showGraph(data, 2, "Altitude", "Altitude (meters)");
+            showGraph(data, 3, "Temperature", "Temperature (C)"); 
+        }
+
         
     }//GEN-LAST:event_downloadGraphActionPerformed
 

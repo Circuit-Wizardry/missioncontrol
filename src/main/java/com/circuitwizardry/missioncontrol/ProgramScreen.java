@@ -324,6 +324,35 @@ public class ProgramScreen extends javax.swing.JFrame {
                 dataPanel.revalidate();
 //                features.add(tvc);
             }
+            if (boardId == 100) {
+                // for response
+                port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                String prev_data = "";
+                try {
+                    prev_data = readDataFromComPort();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ProgramScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                System.out.println(prev_data);
+                
+                generateJson.setVisible(true);
+                dataPanel.setVisible(true);
+                connectionStatus.setText("Connected to STARLIGHT MINI board.");
+                dataPanel.add(new JLabel("text"));
+
+                // Add two JPanels for EJECTION and IGNITER charges
+                
+                PyroCharge ejection = new PyroCharge(dataPanel, 0, "PYRO1", prev_data);
+                
+                features.add(ejection);
+//                features.add(tvc);
+                
+                dataPanel.setPreferredSize(new Dimension(850, features.size() * 100));
+                dataPanel.revalidate();
+//                features.add(tvc);
+            }
         }
     }//GEN-LAST:event_connectButtonActionPerformed
 

@@ -5,6 +5,10 @@
 package com.circuitwizardry.missioncontrol.features.gpio.output;
 
 import com.circuitwizardry.missioncontrol.features.pyro.*;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.json.JSONObject;
@@ -59,6 +63,11 @@ public class Buzzer extends OutputFeature {
 
         jLabel2.setForeground(new java.awt.Color(51, 0, 255));
         jLabel2.setText("Learn More");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -86,6 +95,27 @@ public class Buzzer extends OutputFeature {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // Open C.W. Missioncontrol docs for the user:
+        String url = "https://circuitwizardry.com/missioncontrol/#pin-emulation";
+
+        if(Desktop.isDesktopSupported()){
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(new URI(url));
+            } catch (IOException | URISyntaxException e) {
+                
+            }
+        }else{
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec("xdg-open " + url);
+            } catch (IOException e) {
+                
+            }
+        }
+    }//GEN-LAST:event_jLabel2MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

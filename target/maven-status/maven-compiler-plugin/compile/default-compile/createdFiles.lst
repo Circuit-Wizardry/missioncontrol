@@ -20,6 +20,7 @@ com\circuitwizardry\missioncontrol\features\pyro\CustomPyro$4.class
 com\circuitwizardry\missioncontrol\features\PyroCharge.class
 com\circuitwizardry\missioncontrol\MainScreen$1.class
 com\circuitwizardry\missioncontrol\features\gpio\output\LED.class
+com\circuitwizardry\missioncontrol\features\gpio\output\LED$1.class
 com\circuitwizardry\missioncontrol\ProgramScreen.class
 com\circuitwizardry\missioncontrol\Debrief$7.class
 com\circuitwizardry\missioncontrol\ProgramConfirm$5.class
@@ -51,6 +52,7 @@ com\circuitwizardry\missioncontrol\MainScreen.class
 com\circuitwizardry\missioncontrol\Debrief$3.class
 com\circuitwizardry\missioncontrol\features\gpio\GPIOFeature.class
 com\circuitwizardry\missioncontrol\ProgramConfirm$1.class
+com\circuitwizardry\missioncontrol\features\gpio\output\Buzzer$1.class
 com\circuitwizardry\missioncontrol\features\gpio\input\Button$1.class
 com\circuitwizardry\missioncontrol\features\GPIO$3.class
 com\circuitwizardry\missioncontrol\features\gpio\input\InputFeature.class
