@@ -23,6 +23,8 @@ public class ProgramConfirm extends javax.swing.JFrame {
     SerialPort port;
     /**
      * Creates new form ProgramConfirm
+     * @param c
+     * @param port
      */
     public ProgramConfirm(String c, SerialPort port) {
         String text = c.replaceAll("'", "\"");
@@ -33,7 +35,7 @@ public class ProgramConfirm extends javax.swing.JFrame {
         codeFrame.setText(text);
         this.port = port;
         
-        // DONT CLOSE ALL
+        // DONT CLOSE ALL windows, only this one
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override

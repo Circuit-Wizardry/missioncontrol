@@ -40,7 +40,7 @@ public class MainScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
-        jLabel1.setText("CW MissionControl");
+        jLabel1.setText("CircuitWizardry MissionControl");
 
         programButton.setText("Program");
         programButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,9 +90,9 @@ public class MainScreen extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(docsButton))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jLabel1)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

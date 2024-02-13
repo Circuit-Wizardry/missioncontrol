@@ -465,13 +465,13 @@ public class Debrief extends javax.swing.JFrame {
             showGraph(data, 2, "X Acceleration", "Acceleration");
             showGraph(data, 3, "Y Acceleration", "Acceleration");
             showGraph(data, 4, "Z Acceleration", "Acceleration");
-            showGraph(data, 5, "Altitude", "Altitude (meters)");
+            showGraph(data, 5, "Altitude", "Altitude (feet)");
             showGraph(data, 6, "Temperature", "Temperature (C)");
             showGraph(data, 7, "Roll", "Roll");
             showGraph(data, 8, "Pitch", "Pitch"); 
         }
         if (boardId == 100) {
-            showGraph(data, 2, "Altitude", "Altitude (meters)");
+            showGraph(data, 2, "Altitude", "Altitude (feet)");
             showGraph(data, 3, "Temperature", "Temperature (C)"); 
         }
 
