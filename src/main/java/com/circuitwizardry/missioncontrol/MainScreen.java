@@ -124,14 +124,14 @@ public class MainScreen extends javax.swing.JFrame {
         // Open C.W. Missioncontrol docs for the user:
         String url = "http://www.circuitwizardry.com";
 
-        if(Desktop.isDesktopSupported()){
+        if (Desktop.isDesktopSupported()){
             Desktop desktop = Desktop.getDesktop();
             try {
                 desktop.browse(new URI(url));
             } catch (IOException | URISyntaxException e) {
                 
             }
-        }else{
+        } else {
             Runtime runtime = Runtime.getRuntime();
             try {
                 runtime.exec("xdg-open " + url);

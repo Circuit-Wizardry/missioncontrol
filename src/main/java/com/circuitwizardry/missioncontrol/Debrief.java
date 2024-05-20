@@ -3,39 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.circuitwizardry.missioncontrol;
-import com.circuitwizardry.missioncontrol.features.PyroCharge;
-import com.circuitwizardry.missioncontrol.features.ThrustVectoring;
 import com.fazecast.jSerialComm.SerialPort;
-import java.awt.BorderLayout;
-import java.awt.Desktop;
+import com.circuitwizardry.missioncontrol.debrief.DebriefOverview;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
-import org.knowm.xchart.CSVImporter;
-import org.knowm.xchart.CSVImporter.DataOrientation;
-import org.knowm.xchart.*;
-import org.knowm.xchart.BitmapEncoder.BitmapFormat;
-import org.knowm.xchart.internal.chartpart.Annotation;
 
 /**
  *
@@ -47,7 +30,6 @@ public class Debrief extends javax.swing.JFrame {
     SerialPort port;
     int boardId = 0;
     
-    String[] triggerNames = {"Altitude", "Altitude", "Delayed", "Launch", "Delayed", "Burnout", "Delayed", "Landing", "Delayed"};
     
     /**
      * Creates new form Debrief
@@ -56,7 +38,7 @@ public class Debrief extends javax.swing.JFrame {
         initComponents();
         jPanel1.setVisible(false);
         updateComSelector();
-        
+        downloadSuccessful.setVisible(false);
         
         // DISCONNECT ON CLOSE
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -96,11 +78,11 @@ public class Debrief extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         connectionStatus = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        downloadGraph = new javax.swing.JButton();
-        imageView = new javax.swing.JCheckBox();
         refreshButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
+        downloadGraph = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        downloadSuccessful = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -116,7 +98,7 @@ public class Debrief extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Connect");
+        jButton1.setText("Connect & Download");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -125,39 +107,15 @@ public class Debrief extends javax.swing.JFrame {
 
         connectionStatus.setText("Not connected.");
 
-        jCheckBox1.setText("Start at detected launch");
-
-        downloadGraph.setText("View");
-        downloadGraph.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadGraphActionPerformed(evt);
-            }
-        });
-
-        imageView.setText("View as image");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(imageView)
-                .addGap(31, 31, 31)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(downloadGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+            .addGap(0, 10, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(imageView)
-                    .addComponent(jCheckBox1)
-                    .addComponent(downloadGraph))
-                .addGap(59, 59, 59))
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         refreshButton.setText("Refresh");
@@ -174,53 +132,156 @@ public class Debrief extends javax.swing.JFrame {
             }
         });
 
+        downloadGraph.setText("View");
+        downloadGraph.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        downloadGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadGraphActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        jLabel3.setText("Clicking \"view\" will open an overview screen of your flight.");
+        jLabel3.setToolTipText("");
+
+        downloadSuccessful.setForeground(new java.awt.Color(0, 153, 0));
+        downloadSuccessful.setText("Data successfully downloaded!");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(downloadGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(downloadSuccessful))
+                        .addGap(138, 138, 138)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addComponent(connectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35)
+                                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(backButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(connectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
-                    .addComponent(backButton)
+                    .addComponent(backButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(connectionStatus)
                     .addComponent(refreshButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connectionStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 1, Short.MAX_VALUE)
+                        .addComponent(downloadSuccessful)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(downloadGraph)
+                            .addComponent(jLabel3))
+                        .addGap(5, 5, 5)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // CONNECT TO BOARD & READ WHAT ITS SENDING
+        if (connected) return;
+        
+        connectionStatus.setText("There was an error connecting to your board.");
+        
+        SerialPort ports[] = SerialPort.getCommPorts();
+        int selectedItem = comSelector.getSelectedIndex();
+        SerialPort sp = ports[selectedItem];
+        sp.setBaudRate(9600);
+        sp.openPort();
+        port = sp;
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ProgramScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        int ba = sp.bytesAvailable();
+        ba = sp.bytesAvailable();
+        System.out.println(ba);
+        if (ba > 100) {
+            ba = sp.bytesAvailable();
+        }
+        if (ba > 0) {
+            int boardId = 0;
+            byte[] readBuffer = new byte[ba];
+            sp.readBytes(readBuffer, readBuffer.length);
+            for (int i = 0; i < readBuffer.length; i++) {
+                System.out.print(readBuffer[i] + ", "); // for debugging
+                
+                if (readBuffer[i] == 115)  {    // our byte before our board id bit
+                    boardId = readBuffer[i+1]; // skip new line and carriage return bytes
+                }
+            }
+            
+            if (boardId != 0) {
+                connected = true;
+                connectionStatus.setText("Connected to board ID " + boardId);
+            }
+            System.out.println(boardId);
+            
+            this.boardId = boardId;
+            
+            // Handling code for first connect if STARLIGHT is detected
+            
+            if (boardId == 99) {
+                // for response
+                port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                jPanel1.setVisible(true);
+                connectionStatus.setText("Connected to STARLIGHT board.");
+                parseData();
+                downloadSuccessful.setVisible(true);
+                // Add two JPanels for EJECTION and IGNITER charges
+            }
+
+            if (boardId == 100) {
+                // for response
+                port.writeBytes(new byte[]{0x11, 0x12}, 2);
+                
+                jPanel1.setVisible(true);
+                connectionStatus.setText("Connected to STARLIGHT MINI board.");
+                parseData();
+                downloadSuccessful.setVisible(true);
+                // Add two JPanels for EJECTION and IGNITER charges
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     private ArrayList<String[]> parseData() {
         // read file from board
@@ -285,195 +346,45 @@ public class Debrief extends javax.swing.JFrame {
         
         return outputData;
     }
+
     
-    private void showGraph(ArrayList<String[]> data, int dataIndex, String graphName, String graphX) {
-        
-        double first_timestamp = Double.parseDouble(data.get(0)[1]);
-        
-        ArrayList<Double> dataFinal = new ArrayList<Double>();
-        ArrayList<Double> time = new ArrayList<Double>();
-        for (int i = 0; i < data.size(); i++) {
-            dataFinal.add(Double.parseDouble(data.get(i)[dataIndex]));
-            time.add(Double.parseDouble(data.get(i)[1]) - first_timestamp);
-        }
-        
-        double maximum = dataFinal.get(0);
-        for (int i = 1; i < dataFinal.size(); i++) {
-            if (maximum < dataFinal.get(i)) {
-                maximum = dataFinal.get(i);
-            }
-        }
-        
-        double minimum = dataFinal.get(0);
-        for (int i = 1; i < dataFinal.size(); i++) {
-            if (minimum > dataFinal.get(i)) {
-                minimum = dataFinal.get(i);
-            }
-        }
-        
-        ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-        for (double i = 0; i < data.size(); i++) {
-            // annotations
-            int integerI = (int) i;
-            switch (Integer.parseInt(data.get((int) i)[0])) {
-                    case 1:
-                        System.out.println("found annotation!");
-                        annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
-                        annotations.add(new AnnotationText("Launch", Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
-                    case 2:
-                        System.out.println("found apogee!");
-                        annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
-                        annotations.add(new AnnotationText("Apogee", Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
-            }
-            if (Integer.parseInt(data.get((int) i)[0]) >= 10) {
-                System.out.println("found event!");
-                annotations.add(new AnnotationLine(Double.parseDouble(data.get(integerI)[1]) - first_timestamp, true, false));
-                annotations.add(new AnnotationText(triggerNames[Integer.parseInt(data.get((int) i)[0]) - 10], Double.parseDouble(data.get(integerI)[1]) - first_timestamp, (float)Math.random() * (maximum - minimum) + minimum, false));
-            }
-//            time.add(i);
-        }
-        
-        // Create Chart
-        XYChart chart = QuickChart.getChart(graphName, "Time", graphX, "x", time, dataFinal);
-        
-        for (int i = 0; i < annotations.size(); i++) {
-            chart.addAnnotation(annotations.get(i));
-        }
-        
-        try {
-            // Show it
-            BitmapEncoder.saveBitmapWithDPI(chart, "./graphs/" + graphName + ".png", BitmapFormat.PNG, 1000);
-        } catch (IOException ex) {
-            Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (!imageView.isSelected()) {
-            // Create and set up the window.
-            JFrame frame = new JFrame(graphName);
-            frame.setLayout(new BorderLayout());
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-            // chart
-            JPanel chartPanel = new XChartPanel<XYChart>(chart);
-            frame.add(chartPanel, BorderLayout.CENTER);
-
-            // label
-            JLabel label = new JLabel("Saved to " + new File("./graphs/" + graphName + ".png").getAbsolutePath(), SwingConstants.CENTER);
-            frame.add(label, BorderLayout.SOUTH);
-
-            // Display the window.
-            frame.pack();
-            frame.setVisible(true);   
-        } else {
-            try {
-                Desktop.getDesktop().open(new File("./graphs/" + graphName + ".png"));
-            } catch (IOException ex) {
-                Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-    }
-    
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // CONNECT TO BOARD & READ WHAT ITS SENDING
-        if (connected) return;
-        
-        connectionStatus.setText("There was an error connecting to your board.");
-        
-        SerialPort ports[] = SerialPort.getCommPorts();
-        int selectedItem = comSelector.getSelectedIndex();
-        SerialPort sp = ports[selectedItem];
-        sp.setBaudRate(9600);
-        sp.openPort();
-        port = sp;
-        
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ProgramScreen.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        int ba = sp.bytesAvailable();
-        ba = sp.bytesAvailable();
-        System.out.println(ba);
-        if (ba > 100) {
-            ba = sp.bytesAvailable();
-        }
-        if (ba > 0) {
-            int boardId = 0;
-            byte[] readBuffer = new byte[ba];
-            sp.readBytes(readBuffer, readBuffer.length);
-            for (int i = 0; i < readBuffer.length; i++) {
-                System.out.print(readBuffer[i] + ", "); // for debugging
-                
-                if (readBuffer[i] == 115)  {    // our byte before our board id bit
-                    boardId = readBuffer[i+1]; // skip new line and carriage return bytes
-                }
-            }
-            
-            if (boardId != 0) {
-                connected = true;
-                connectionStatus.setText("Connected to board ID " + boardId);
-            }
-            System.out.println(boardId);
-            
-            this.boardId = boardId;
-            
-            // Handling code for first connect if STARLIGHT is detected
-            
-            if (boardId == 99) {
-                // for response
-                port.writeBytes(new byte[]{0x11, 0x12}, 2);
-                
-                jPanel1.setVisible(true);
-                connectionStatus.setText("Connected to STARLIGHT board.");
-                // Add two JPanels for EJECTION and IGNITER charges
-            }
-            
-            if (boardId == 99) {
-                // for response
-                port.writeBytes(new byte[]{0x11, 0x12}, 2);
-                
-                jPanel1.setVisible(true);
-                connectionStatus.setText("Connected to STARLIGHT board.");
-                // Add two JPanels for EJECTION and IGNITER charges
-            }
-            if (boardId == 100) {
-                // for response
-                port.writeBytes(new byte[]{0x11, 0x12}, 2);
-                
-                jPanel1.setVisible(true);
-                connectionStatus.setText("Connected to STARLIGHT MINI board.");
-                // Add two JPanels for EJECTION and IGNITER charges
-            }
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void downloadGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadGraphActionPerformed
-        port.writeBytes(new byte[]{0x11, 0x14}, 2);
+//        if (connected) {
+//        parseData();
+        var debriefOverview = new DebriefOverview(port, boardId);
+        debriefOverview.setVisible(true);
+//        }
         
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        setVisible(false);
         
-        ArrayList<String[]> data = parseData();
-        
-        if (boardId == 99) {
-            showGraph(data, 2, "X Acceleration", "Acceleration");
-            showGraph(data, 3, "Y Acceleration", "Acceleration");
-            showGraph(data, 4, "Z Acceleration", "Acceleration");
-            showGraph(data, 5, "Altitude", "Altitude (feet)");
-            showGraph(data, 6, "Temperature", "Temperature (C)");
-            showGraph(data, 7, "Roll", "Roll");
-            showGraph(data, 8, "Pitch", "Pitch"); 
-        }
-        if (boardId == 100) {
-            showGraph(data, 2, "Altitude", "Altitude (feet)");
-            showGraph(data, 3, "Temperature", "Temperature (C)"); 
-        }
+//        
+//        
+//        port.writeBytes(new byte[]{0x11, 0x14}, 2);
+//        
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        ArrayList<String[]> data = parseData();
+//        
+//        if (boardId == 99) {
+//            showGraph(data, 2, "X Acceleration", "Acceleration");
+//            showGraph(data, 3, "Y Acceleration", "Acceleration");
+//            showGraph(data, 4, "Z Acceleration", "Acceleration");
+//            showGraph(data, 5, "Altitude", "Altitude (feet)");
+//            showGraph(data, 6, "Temperature", "Temperature (C)");
+//            showGraph(data, 7, "Roll", "Roll");
+//            showGraph(data, 8, "Pitch", "Pitch"); 
+//        }
+//        if (boardId == 100) {
+//            showGraph(data, 2, "Altitude", "Altitude (feet)");
+//            showGraph(data, 3, "Temperature", "Temperature (C)");
+//            showGraph(data, 4, "X Acceleration", "Acceleration");
+//            showGraph(data, 5, "Y Acceleration", "Acceleration");
+//            showGraph(data, 6, "Z Acceleration", "Acceleration");
+//        }
 
         
     }//GEN-LAST:event_downloadGraphActionPerformed
@@ -537,11 +448,11 @@ public class Debrief extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comSelector;
     private javax.swing.JLabel connectionStatus;
     private javax.swing.JButton downloadGraph;
-    private javax.swing.JCheckBox imageView;
+    private javax.swing.JLabel downloadSuccessful;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton refreshButton;
     // End of variables declaration//GEN-END:variables

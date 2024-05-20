@@ -1,4 +1,5 @@
 com\circuitwizardry\missioncontrol\Debrief$4.class
+com\circuitwizardry\missioncontrol\debrief\DebriefOverview$1.class
 com\circuitwizardry\missioncontrol\features\GPIO$2.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$2.class
 com\circuitwizardry\missioncontrol\features\AudioCues.class
@@ -13,6 +14,8 @@ com\circuitwizardry\missioncontrol\features\gpio\EmulatePyro$2.class
 com\circuitwizardry\missioncontrol\MainScreen$4.class
 com\circuitwizardry\missioncontrol\features\GPIO.class
 com\circuitwizardry\missioncontrol\features\GPIO$5.class
+com\circuitwizardry\missioncontrol\debrief\DownloadDataConfirm$1.class
+com\circuitwizardry\missioncontrol\debrief\DownloadDataConfirm$2.class
 com\circuitwizardry\missioncontrol\features\AudioCues$1.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$1.class
 com\circuitwizardry\missioncontrol\ProgramScreen$6.class
@@ -26,11 +29,13 @@ com\circuitwizardry\missioncontrol\Debrief$7.class
 com\circuitwizardry\missioncontrol\ProgramConfirm$5.class
 com\circuitwizardry\missioncontrol\features\gpio\output\Buzzer.class
 com\circuitwizardry\missioncontrol\ProgramConfirm.class
+com\circuitwizardry\missioncontrol\debrief\DownloadDataConfirm.class
 com\circuitwizardry\missioncontrol\features\gpio\EmulatePyro$3.class
 com\circuitwizardry\missioncontrol\features\GPIO$4.class
 com\circuitwizardry\missioncontrol\features\GPIO$1.class
 com\circuitwizardry\missioncontrol\features\pyro\MainChute$1.class
 com\circuitwizardry\missioncontrol\ProgramScreen$2.class
+com\circuitwizardry\missioncontrol\debrief\DebriefOverview.class
 com\circuitwizardry\missioncontrol\features\PyroCharge$5.class
 com\circuitwizardry\missioncontrol\features\gpio\Input.class
 com\circuitwizardry\missioncontrol\features\gpio\Output$1.class
