@@ -75,7 +75,7 @@ public class DebriefOverview extends javax.swing.JFrame {
         initComponents();
         this.setVisible(true);
         this.port = prt;
-        this.boardId = 100; // TEMPORARY
+        this.boardId = bId;
         parseLocalData();
         calculateMilestones();
         setupDebriefScreen();
@@ -305,8 +305,6 @@ public class DebriefOverview extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Overview");
-
-        flownWithLabel.setText("Flown with STARLIGHT MINI");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Apogee:");

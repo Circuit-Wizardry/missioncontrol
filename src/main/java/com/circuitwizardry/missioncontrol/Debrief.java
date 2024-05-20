@@ -38,7 +38,6 @@ public class Debrief extends javax.swing.JFrame {
         initComponents();
         jPanel1.setVisible(false);
         updateComSelector();
-        downloadSuccessful.setVisible(false);
         
         // DISCONNECT ON CLOSE
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -82,7 +81,6 @@ public class Debrief extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
         downloadGraph = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        downloadSuccessful = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -98,7 +96,7 @@ public class Debrief extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Connect & Download");
+        jButton1.setText("Connect");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -141,11 +139,8 @@ public class Debrief extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-        jLabel3.setText("Clicking \"view\" will open an overview screen of your flight.");
+        jLabel3.setText("Clicking \"view\" will open an overview screen of your flight. It may take a minute!");
         jLabel3.setToolTipText("");
-
-        downloadSuccessful.setForeground(new java.awt.Color(0, 153, 0));
-        downloadSuccessful.setText("Data successfully downloaded!");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,30 +148,24 @@ public class Debrief extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(downloadGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(downloadSuccessful))
-                        .addGap(138, 138, 138)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(downloadGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(connectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(backButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(connectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(backButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,9 +186,7 @@ public class Debrief extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 1, Short.MAX_VALUE)
-                        .addComponent(downloadSuccessful)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 5, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(downloadGraph)
                             .addComponent(jLabel3))
@@ -264,8 +251,6 @@ public class Debrief extends javax.swing.JFrame {
                 
                 jPanel1.setVisible(true);
                 connectionStatus.setText("Connected to STARLIGHT board.");
-                parseData();
-                downloadSuccessful.setVisible(true);
                 // Add two JPanels for EJECTION and IGNITER charges
             }
 
@@ -275,8 +260,6 @@ public class Debrief extends javax.swing.JFrame {
                 
                 jPanel1.setVisible(true);
                 connectionStatus.setText("Connected to STARLIGHT MINI board.");
-                parseData();
-                downloadSuccessful.setVisible(true);
                 // Add two JPanels for EJECTION and IGNITER charges
             }
         }
@@ -349,11 +332,11 @@ public class Debrief extends javax.swing.JFrame {
 
     
     private void downloadGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadGraphActionPerformed
-//        if (connected) {
-//        parseData();
+        if (connected) {
+        parseData();
         var debriefOverview = new DebriefOverview(port, boardId);
         debriefOverview.setVisible(true);
-//        }
+        }
         
 //        setVisible(false);
         
@@ -448,7 +431,6 @@ public class Debrief extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comSelector;
     private javax.swing.JLabel connectionStatus;
     private javax.swing.JButton downloadGraph;
-    private javax.swing.JLabel downloadSuccessful;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

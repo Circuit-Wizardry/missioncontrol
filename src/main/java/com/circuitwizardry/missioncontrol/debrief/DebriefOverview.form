@@ -137,9 +137,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="flownWithLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Flown with STARLIGHT MINI"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
