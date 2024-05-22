@@ -333,9 +333,20 @@ public class Debrief extends javax.swing.JFrame {
     
     private void downloadGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadGraphActionPerformed
         if (connected) {
-        parseData();
-        var debriefOverview = new DebriefOverview(port, boardId);
-        debriefOverview.setVisible(true);
+            
+            port.writeBytes(new byte[]{0x11, 0x14}, 2);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Debrief.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            ArrayList<String[]> data = parseData();
+            
+            var debriefOverview = new DebriefOverview(port, boardId);
+            debriefOverview.setVisible(true);
+            
         }
         
 //        setVisible(false);
